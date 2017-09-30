@@ -3,8 +3,7 @@
   <component name="dataSourceStorageLocal">
     <data-source name="Django default" uuid="7ae94271-09ec-4938-b81f-782860fa0408">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
-      <secret-storage>memory</secret-storage>
-      <user-password>df9bdf98df99df9edf9fdf9c</user-password>
+      <user-name>root</user-name>
     </data-source>
   </component>
 </project>

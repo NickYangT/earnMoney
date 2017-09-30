@@ -29,7 +29,7 @@ class UsersModel(models.Model):
     sex = models.CharField(max_length=4, choices=SEX, default='B', verbose_name=u'性别')
     age = models.IntegerField(verbose_name=u'年龄')
     cellphones = models.CharField(max_length=11, verbose_name=u'手机')
-    image = models.FileField(verbose_name=u'图像')
+    image = models.FileField(upload_to='../earnMoney/static', blank=True, default='../earnMoney/static/defualt.jpg', verbose_name=u'头像')
     address = models.CharField(max_length=100, verbose_name=u'家庭住址')
     birthday = models.DateField(verbose_name=u'出生日期')
     profession = models.CharField(max_length=30, verbose_name=u'职业')
@@ -45,20 +45,62 @@ class UsersModel(models.Model):
         )
     colored_status.short_description = u'年收入(万)'
 
+    def goto_url(self):
+        return format_html(
+            '<a href="{0}" style="color:  #0000FF;"><strong>{0}</strong></a>'.format(self.blog)
+        )
+    goto_url.short_description = u'博客地址'
+
+
+    def __unicode__(self):
+        return self.alisa
+
+    class Meta:
+        verbose_name = u'用户信息'
+        verbose_name_plural = verbose_name
+
+
+class Publisher(models.Model):
+    Star = {('★', '一星'),
+            ('★★', '二星'),
+            ('★★★', '三星'),
+            ('★★★★', '四星'),
+            ('★★★★★', '五星')
+    }
+    name = models.CharField(max_length=100, verbose_name=u'出版社')
+    rank = models.CharField(max_length=10, choices=Star, verbose_name=u'出版社等级')
+    address = models.CharField(max_length=200, verbose_name=u'出版社地址')
+
+    def get_rank(self):
+        return format_html(
+            '<span style="color: #FF0000;"><strong>{}</strong></span>',
+            self.rank,
+        )
+    get_rank.short_description = u'出版社星级'
 
     def __unicode__(self):
         return self.name
 
     class Meta:
-        verbose_name=u'用户信息'
+        verbose_name = u'出版社'
         verbose_name_plural = verbose_name
 
 
 
+class BookModel(models.Model):
+    name = models.CharField(max_length=100, verbose_name=u'书名')
+    author = models.ForeignKey(UsersModel, verbose_name=u'作者')
+    price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name=u'价格')
+    profile = models.CharField(max_length=200, null=False, verbose_name=u'简介')
+    publisher = models.ForeignKey(Publisher, verbose_name=u'出版社')
+    publisher_date = models.DateField(auto_now_add=True, verbose_name=u'出版日期')
 
+    def __unicode__(self):
+        return self.name
 
-
-
+    class Meta:
+        verbose_name = u'书'
+        verbose_name_plural = verbose_name
 
 
 
